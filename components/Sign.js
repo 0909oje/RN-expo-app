@@ -2,41 +2,51 @@ import React, { useRef } from "react";
 import { StyleSheet, View, Button } from "react-native";
 import SignatureScreen from "react-native-signature-canvas";
 
+import * as FileSystem from "expo-file-system";
+
 const Sign = ({ onOK }) => {
   const ref = useRef();
 
   const handleOK = (signature) => {
-    console.log(signature);
-    onOK(signature);
+    // console.log(signature);
+    // onOK(signature);
+
+    //사용자 데이터 파일이 아닌 파일에 대한 애플리케이션의 최상위 디렉터리를 가져옵니다
+    const path = "FileSystem.cacheDirectory" + "sign.png";
+    
+    FileSystem.writeAsStringAsync(
+        path,
+        signature.replace("data:image/png;base64,", ""),
+        { encoding: FileSystem.EncodingType.Base64 }
+    )
+        // 해당 파일이 파일시스템안에 존재하는지 콘솔로그
+        .then(() => FileSystem.getInfoAsync(path))
+        .then(console.log)
+        .catch(console.error);
   };
 
   const handleClear = () => {
     ref.current.clearSignature();
   };
 
-  const handleConfirm = () => {
-    console.log("end");
-    ref.current.readSignature();
-  };
-  //
   const handleUndo = () => {
-    // console.log("end");
     ref.current.undo();
   };
   const handleRedo = () => {
-    //console.log("end");
     ref.current.redo();
   };
   const handleDraw = () => {
-    //console.log("end");
     ref.current.draw();
   };
   const handleErase = () => {
-    //console.log("end");
     ref.current.erase();
   };
 
-  const style = `.m-signature-pad--footer {display: none; margin: 0px;}`;
+  const style = `.m-signature-pad { border: none; 
+    margin-left: 10px; margin-right: 20px;
+    margin-top: 10px;
+    height: 800px;} 
+  .m-signature-pad--footer {display: none; margin: 0px;}`;
 
   return (
     <View style={styles.container}>
@@ -60,14 +70,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 250,
-    padding: 10,
+    // padding: 10,
   },
   row: {
-    marginTop: 30,
+    marginTop: 50,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "100%",
+    width: "50%",
     alignItems: "center",
   },
 });
