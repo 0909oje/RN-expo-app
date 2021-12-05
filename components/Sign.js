@@ -18,16 +18,36 @@ const Sign = ({ onOK }) => {
     console.log("end");
     ref.current.readSignature();
   };
+  //
+  const handleUndo = () => {
+    // console.log("end");
+    ref.current.undo();
+  };
+  const handleRedo = () => {
+    //console.log("end");
+    ref.current.redo();
+  };
+  const handleDraw = () => {
+    //console.log("end");
+    ref.current.draw();
+  };
+  const handleErase = () => {
+    //console.log("end");
+    ref.current.erase();
+  };
 
   const style = `.m-signature-pad--footer {display: none; margin: 0px;}`;
 
   return (
     <View style={styles.container}>
-      <SignatureScreen ref={ref} onOK={handleOK} webStyle={style} />
-      <View style={styles.row}>
+        <View style={styles.row}>
+        <Button title="Draw" onPress={handleDraw} />
+        <Button title="Erase" onPress={handleErase} />
+        <Button title="Undo" onPress={handleUndo} />
+        <Button title="Redo" onPress={handleRedo} />
         <Button title="Clear" onPress={handleClear} />
-        <Button title="Confirm" onPress={handleConfirm} />
       </View>
+      <SignatureScreen ref={ref} onOK={handleOK} webStyle={style} />
     </View>
   );
 };
@@ -43,6 +63,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   row: {
+    marginTop: 30,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
